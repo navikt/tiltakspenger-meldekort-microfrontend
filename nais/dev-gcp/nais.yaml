@@ -29,8 +29,8 @@ spec:
     requests:
       cpu: "20m"
       memory: 128Mi
-env:
-  - name: MELDEKORT_API_URL
-    value: http://tiltakspenger-meldekort-api
-  - name: MELDEKORT_API_SCOPE
-    value: dev-gcp:tpts:tiltakspenger-meldekort-api
+  env:
+    - name: MELDEKORT_API_URL
+      value: http://tiltakspenger-meldekort-api
+    - name: MELDEKORT_API_SCOPE
+      value: dev-gcp:tpts:tiltakspenger-meldekort-api

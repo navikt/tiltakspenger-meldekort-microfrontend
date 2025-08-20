@@ -1,6 +1,6 @@
 export const text = {
   title: {
-    nb: "tiltakspenger-meldekort-microfrontend (nb)",
+    nb: "Meldekort (ny løsning!)",
     en: "tiltakspenger-meldekort-microfrontend (en)",
     nn: "tiltakspenger-meldekort-microfrontend (nn)",
   },

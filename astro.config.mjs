@@ -53,7 +53,7 @@ export default defineConfig({
   }),
   env: {
     schema: {
-      EXAMPLE_API_URL: envField.string({
+      MELDEKORT_API_URL: envField.string({
         context: "server",
         access: "secret",
         default: "http://localhost:3000/api/tms-astro-template"
