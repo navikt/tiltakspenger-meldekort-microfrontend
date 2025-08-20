@@ -1,4 +1,4 @@
-# tms-microfrontend-template-ssr
+# tiltakspenger-meldekort-microfrontend
 
 Kan brukes som utgangspunkt for å opprette nye server-side rendrede microfrontends til Min Side.
 
@@ -6,7 +6,7 @@ Kan brukes som utgangspunkt for å opprette nye server-side rendrede microfronte
 
 ## Tilpasse templatet til ditt prosjekt
 
-1. `CMD + Shift + F` og søk etter `tms-microfrontend-template-ssr` og erstatt dette med ditt applikasjonsnavn.
+1. `CMD + Shift + F` og søk etter `tiltakspenger-meldekort-microfrontend` og erstatt dette med ditt applikasjonsnavn.
 2. Tilpass innholdet i `nais/dev-gcp/nais.yaml` og `nais/prod-gcp/nais.yaml` til ditt prosjekt.
 3. Tilpass innholdet i `.github/workflows/deploy.yaml` til ditt prosjekt.
 4. Be om tilgang til å oppdatere manifestet og deploye applikasjonen til nais på slack kanalen [#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P).

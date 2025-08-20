@@ -1,8 +1,8 @@
 export const text = {
   title: {
-    nb: "tms-microfrontend-template-ssr (nb)",
-    en: "tms-microfrontend-template-ssr (en)",
-    nn: "tms-microfrontend-template-ssr (nn)",
+    nb: "tiltakspenger-meldekort-microfrontend (nb)",
+    en: "tiltakspenger-meldekort-microfrontend (en)",
+    nn: "tiltakspenger-meldekort-microfrontend (nn)",
   },
   name: {
     nb: "Navn",

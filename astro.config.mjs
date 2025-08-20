@@ -8,7 +8,7 @@ import prefixer from "postcss-prefix-selector";
 // https://astro.build/config
 export default defineConfig({
   build: {
-    assetsPrefix: "https://cdn.nav.no/min-side/tms-microfrontend-template-ssr",
+    assetsPrefix: "https://cdn.nav.no/min-side/tiltakspenger-meldekort-microfrontend",
     inlineStylesheets: "always",
   },
   vite: {
@@ -16,7 +16,7 @@ export default defineConfig({
       postcss: {
         plugins: [
           prefixer({
-            prefix: ".tms-microfrontend-template-ssr",
+            prefix: ".tiltakspenger-meldekort-microfrontend",
             ignoreFiles: [/module.css/],
           }),
         ],
