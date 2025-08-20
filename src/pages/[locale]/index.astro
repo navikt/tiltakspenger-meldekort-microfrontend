@@ -9,6 +9,7 @@ import { MELDEKORT_API_URL } from "astro:env/server";
 import type { Language } from "@src/language/types";
 import styles from "@src/styles/index.module.css";
 import "@src/styles/aksel.css";
+import { isLocal } from "../../utils/environment";
 
 const oboToken = await getOboToken(Astro.locals.token);
 let exampleData;
@@ -24,6 +25,7 @@ const language = Astro.currentLocale as Language;
 ---
 
 <>
+  {isLocal && <meta charset="UTF-8" />}
   <section class="tiltakspenger-meldekort-microfrontend">
     <div class={styles.microfrontend} id="microfrontend">
       <Heading size="medium" level="2">
