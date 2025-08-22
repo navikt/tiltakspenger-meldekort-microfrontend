@@ -1,12 +1,17 @@
 export const text = {
-  title: {
-    nb: "Meldekort (ny løsning!)",
-    en: "tiltakspenger-meldekort-microfrontend (en)",
-    nn: "tiltakspenger-meldekort-microfrontend (nn)",
+  tittel: {
+    nb: "Meldekort for tiltakspenger",
+    nn: "Meldekort for tiltakspengar",
+    en: "Benefit claim form for initiative money",
   },
-  name: {
-    nb: "Navn",
-    en: "Name",
-    nn: "Navn",
+  ett: {
+    nb: "Send inn meldekort",
+    nn: "Send inn meldekort",
+    en: "Submit benefit claim form",
+  },
+  flere: {
+    nb: "Du har {count} meldekort klare til innsending",
+    nn: "Du har {count} meldekort klare til innsending",
+    en: "You have {count} benefit claim form ready to be sent",
   },
 };

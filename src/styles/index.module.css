@@ -1,6 +1,68 @@
-/* Do not specify margin for the microfrontend */
-
 .microfrontend {
-  border: gray dashed;
-  padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--a-border-radius-xlarge);
+    background-color: var(--a-bg-default);
+    box-shadow: var(--a-shadow-xsmall);
+    overflow: hidden;
+}
+
+.tittel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+}
+
+.microfrontend:hover {
+    cursor: pointer;
+    box-shadow: var(--a-shadow-small);
+}
+
+.microfrontend:hover .chevron {
+    transition-duration: 0.2s;
+    transform: translate(3px, 0);
+}
+
+.microfrontend:hover h3 {
+    text-decoration: underline;
+}
+
+.microfrontend:focus {
+    box-shadow: var(--a-shadow-focus);
+    outline: none;
+}
+
+.body {
+    padding: 1.25rem;
+    text-align: left;
+}
+
+.chevron {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.5rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 320px) {
+    .microfrontend {
+        max-width: 18rem;
+        max-height: 14rem;
+    }
+
+    .tittel {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 1440px) {
+    .microfrontend {
+        max-width: 29.25rem;
+        max-height: 14rem;
+    }
+
+    .tittel {
+        padding: 1.25rem;
+    }
 }
