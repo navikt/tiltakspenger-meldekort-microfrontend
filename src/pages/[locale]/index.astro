@@ -1,5 +1,5 @@
 ---
-import { Heading, BodyShort } from "@navikt/ds-react";
+import { Heading, BodyShort, Skeleton } from "@navikt/ds-react";
 import { text } from "@src/language/text";
 import { logger } from "@src/utils/logger";
 import { getOboToken } from "@src/utils/token";
@@ -16,7 +16,7 @@ let data;
 
 try {
     data = await fetchExampleData(oboToken, MELDEKORT_API_URL);
-    data = { antallMeldekort: 2 };
+    data = { antallMeldekort: 2, isLoading: false };
 } catch (error) {
     logger.error("Error fetching example data: " + error);
     return new Response("Internal Server Error", { status: 503 });
@@ -29,28 +29,45 @@ const language = Astro.currentLocale as Language;
     {isLocal && <meta charset="UTF-8" />}
     <section class="tiltakspenger-meldekort-microfrontend">
         <div class={styles.microfrontend} style={{ position: "relative" }}>
-            <div class={styles.tittel}>
-                <Heading size="small" level="3">
-                    {text.tittel[language]}
-                </Heading>
-            </div>
-            <div class={styles.body}>
-                <BodyShort>
+            {
+                data.isLoading ? (
                     <>
-                        {data.antallMeldekort <= 1 && text.ett[language]}
-                        {
-                            data.antallMeldekort > 1 &&
-                                text.flere[language].replace(
-                                    "{count}",
-                                    data.antallMeldekort.toString(),
-                                )
-                        }
+                        <div class={styles.tittel}>
+                            <Heading as={Skeleton} size="small" level="3" width="60%">
+                                {text.tittel[language]}
+                            </Heading>
+                        </div>
+                        <div class={styles.body}>
+                            <Skeleton variant="text" width="100%" />
+                        </div>
                     </>
-                </BodyShort>
-            </div>
-            <div class={styles.chevron}>
-                <ChevronRightIcon />
-            </div>
+                ) : (
+                    <>
+                        <div class={styles.tittel}>
+                            <Heading size="small" level="3">
+                                {text.tittel[language]}
+                            </Heading>
+                        </div>
+                        <div class={styles.body}>
+                            <>
+                                <BodyShort>
+                                    <>
+                                        {data.antallMeldekort <= 1 && text.ett[language]}
+                                        {data.antallMeldekort > 1 &&
+                                            text.flere[language].replace(
+                                                "{count}",
+                                                data.antallMeldekort.toString(),
+                                            )}
+                                    </>
+                                </BodyShort>
+                                <div class={styles.chevron}>
+                                    <ChevronRightIcon />
+                                </div>
+                            </>
+                        </div>
+                    </>
+                )
+            }
         </div>
     </section>
     <script>
