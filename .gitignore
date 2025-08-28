@@ -21,6 +21,7 @@ jspm_packages/
 .idea/
 
 # Environment variables
+.env.development
 .env
 
 # MacOS files

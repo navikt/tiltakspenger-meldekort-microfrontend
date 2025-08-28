@@ -1,5 +1,5 @@
-export const fetchExampleData = async (oboToken: string, url: string) => {
-    const response = await fetch(url, {
+export const fetchMeldekortKortInfo = async (oboToken: string, url: string) => {
+    const response = await fetch(`${url}/din-side/microfrontend/meldekort-kort-info`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
