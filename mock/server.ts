@@ -1,20 +1,24 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
-import example from "./data/example.json";
+import mockData from "./data/meldekort-kort-info.json";
 
 const api = new Hono();
 
-
 // Enable CORS for all routes
-api.use("/*", cors({
-  origin: "http://localhost:4321",
-  credentials: true,
-}));
+api.use(
+    "/*",
+    cors({
+        origin: "http://localhost:4321",
+        credentials: true,
+    }),
+);
 
-api.get('/api/tms-astro-template', (c) => {
-  return c.json(example);
+api.get("/din-side/microfrontend/meldekort-kort-info", (c) => {
+    return c.json(mockData);
 });
 
-
-serve(api);
+serve({
+    fetch: api.fetch,
+    port: 8083,
+});

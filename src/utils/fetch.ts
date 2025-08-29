@@ -1,5 +1,7 @@
-export const fetchMeldekortKortInfo = async (oboToken: string, url: string) => {
-    const response = await fetch(`${url}/din-side/microfrontend/meldekort-kort-info`, {
+export const getDataFromAPI = async (oboToken: string, url: string) => {
+    console.debug(`Attempting to reach: ${url}`);
+
+    const response = await fetch(url, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

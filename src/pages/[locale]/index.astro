@@ -1,9 +1,9 @@
 ---
-import { Heading, BodyShort, Skeleton } from "@navikt/ds-react";
+import { Heading, BodyShort } from "@navikt/ds-react";
 import { text } from "@src/language/text";
 import { logger } from "@src/utils/logger";
 import { getOboToken } from "@src/utils/token";
-import { fetchMeldekortKortInfo } from "@src/utils/fetch";
+import { getDataFromAPI } from "@src/utils/fetch";
 import { MELDEKORT_API_URL } from "astro:env/server";
 import type { Language } from "@src/language/types";
 import styles from "@src/styles/index.module.css";
@@ -15,7 +15,8 @@ const oboToken = await getOboToken(Astro.locals.token);
 let data;
 
 try {
-    data = await fetchMeldekortKortInfo(oboToken, MELDEKORT_API_URL);
+    const url = `${MELDEKORT_API_URL}/din-side/microfrontend/meldekort-kort-info`;
+    data = await getDataFromAPI(oboToken, url);
 } catch (error) {
     logger.error("Error fetching data: " + error);
     return new Response("Internal Server Error", { status: 503 });
@@ -28,45 +29,30 @@ const language = Astro.currentLocale as Language;
     {isLocal && <meta charset="UTF-8" />}
     <section class="tiltakspenger-meldekort-microfrontend">
         <div class={styles.microfrontend} style={{ position: "relative" }}>
-            {
-                data.isLoading ? (
-                    <>
-                        <div class={styles.tittel}>
-                            <Heading as={Skeleton} size="small" level="3" width="60%">
-                                {text.tittel[language]}
-                            </Heading>
-                        </div>
-                        <div class={styles.body}>
-                            <Skeleton variant="text" width="100%" />
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div class={styles.tittel}>
-                            <Heading size="small" level="3">
-                                {text.tittel[language]}
-                            </Heading>
-                        </div>
-                        <div class={styles.body}>
-                            <>
-                                <BodyShort>
-                                    <>
-                                        {data.antallMeldekort <= 1 && text.ett[language]}
-                                        {data.antallMeldekort > 1 &&
-                                            text.flere[language].replace(
-                                                "{count}",
-                                                data.antallMeldekort.toString(),
-                                            )}
-                                    </>
-                                </BodyShort>
-                                <div class={styles.chevron}>
-                                    <ChevronRightIcon />
-                                </div>
-                            </>
-                        </div>
-                    </>
-                )
-            }
+            <>
+                <div class={styles.tittel}>
+                    <Heading size="small" level="3">
+                        {text.tittel[language]}
+                    </Heading>
+                </div>
+                <div class={styles.body}>
+                    <BodyShort>
+                        <>
+                            {data.antallMeldekortKlarTilInnsending <= 1 && text.ett[language]}
+                            {
+                                data.antallMeldekortKlarTilInnsending > 1 &&
+                                    text.flere[language].replace(
+                                        "{count}",
+                                        data.antallMeldekortKlarTilInnsending.toString(),
+                                    )
+                            }
+                        </>
+                    </BodyShort>
+                    <div class={styles.chevron}>
+                        <ChevronRightIcon />
+                    </div>
+                </div>
+            </>
         </div>
     </section>
     <script>
