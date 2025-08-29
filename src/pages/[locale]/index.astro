@@ -23,6 +23,26 @@ try {
 }
 
 const language = Astro.currentLocale as Language;
+
+function getMeldekortText(data: any, language: Language) {
+    if (data.antallMeldekortKlarTilInnsending == 0 && data.nesteMuligeInnsending) {
+        const dato = new Date(data.nesteMuligeInnsending);
+        const formatertDato = new Intl.DateTimeFormat(language, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        }).format(dato);
+        return text.neste[language].replace("{dato}", formatertDato);
+    } else if (data.antallMeldekortKlarTilInnsending == 1) {
+        return text.ett[language];
+    } else if (data.antallMeldekortKlarTilInnsending > 1) {
+        return text.flere[language].replace(
+            "{count}",
+            data.antallMeldekortKlarTilInnsending.toString(),
+        );
+    }
+    return text.ett[language];
+}
 ---
 
 <>
@@ -38,14 +58,7 @@ const language = Astro.currentLocale as Language;
                 <div class={styles.body}>
                     <BodyShort>
                         <>
-                            {data.antallMeldekortKlarTilInnsending <= 1 && text.ett[language]}
-                            {
-                                data.antallMeldekortKlarTilInnsending > 1 &&
-                                    text.flere[language].replace(
-                                        "{count}",
-                                        data.antallMeldekortKlarTilInnsending.toString(),
-                                    )
-                            }
+                            {getMeldekortText(data, language)}
                         </>
                     </BodyShort>
                     <div class={styles.chevron}>
