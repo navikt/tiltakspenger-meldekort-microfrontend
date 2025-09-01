@@ -5,6 +5,16 @@
     background-color: var(--a-bg-default);
     box-shadow: var(--a-shadow-xsmall);
     overflow: hidden;
+    position: relative;
+}
+
+.microfrontend a,
+.microfrontend a:link,
+.microfrontend a:visited,
+.microfrontend a:hover,
+.microfrontend a:active {
+    color: var(--a-gray-900);
+    text-decoration: none;
 }
 
 .tittel {

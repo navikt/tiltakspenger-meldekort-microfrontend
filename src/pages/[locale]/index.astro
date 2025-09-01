@@ -5,6 +5,7 @@ import { logger } from "@src/utils/logger";
 import { getOboToken } from "@src/utils/token";
 import { getDataFromAPI } from "@src/utils/fetch";
 import { MELDEKORT_API_URL } from "astro:env/server";
+import { MELDEKORT_URL } from "astro:env/client";
 import type { Language } from "@src/language/types";
 import styles from "@src/styles/index.module.css";
 import "@src/styles/aksel.css";
@@ -48,8 +49,8 @@ function getMeldekortText(data: any, language: Language) {
 <>
     {isLocal && <meta charset="UTF-8" />}
     <section class="tiltakspenger-meldekort-microfrontend">
-        <div class={styles.microfrontend} style={{ position: "relative" }}>
-            <>
+        <div class={styles.microfrontend} }>
+            <a href={MELDEKORT_URL}>
                 <div class={styles.tittel}>
                     <Heading size="small" level="3">
                         {text.tittel[language]}
@@ -65,7 +66,7 @@ function getMeldekortText(data: any, language: Language) {
                         <ChevronRightIcon />
                     </div>
                 </div>
-            </>
+            </a>
         </div>
     </section>
     <script>

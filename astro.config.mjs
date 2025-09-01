@@ -7,57 +7,62 @@ import prefixer from "postcss-prefix-selector";
 
 // https://astro.build/config
 export default defineConfig({
-  build: {
-    assetsPrefix: "https://cdn.nav.no/min-side/tiltakspenger-meldekort-microfrontend",
-    inlineStylesheets: "always",
-  },
-  vite: {
-    css: {
-      postcss: {
-        plugins: [
-          prefixer({
-            prefix: ".tiltakspenger-meldekort-microfrontend",
-            ignoreFiles: [/module.css/],
-          }),
-        ],
-      },
+    build: {
+        assetsPrefix: "https://cdn.nav.no/min-side/tiltakspenger-meldekort-microfrontend",
+        inlineStylesheets: "always",
     },
-  },
-  integrations: [
-    react(),
-    {
-      name: "importmap",
-      hooks: {
-        "astro:build:setup": ({ vite, target }) => {
-          if (target === "client") {
-            vite.plugins.push({
-              ...rollupImportMapPlugin(importmap),
-              enforce: "pre",
-              apply: "build",
-            });
-          }
+    vite: {
+        css: {
+            postcss: {
+                plugins: [
+                    prefixer({
+                        prefix: ".tiltakspenger-meldekort-microfrontend",
+                        ignoreFiles: [/module.css/],
+                    }),
+                ],
+            },
         },
-      },
     },
-  ],
-  i18n: {
-    defaultLocale: "nb",
-    locales: ["nb", "nn", "en"],
-    routing: {
-      prefixDefaultLocale: true,
+    integrations: [
+        react(),
+        {
+            name: "importmap",
+            hooks: {
+                "astro:build:setup": ({ vite, target }) => {
+                    if (target === "client") {
+                        vite.plugins.push({
+                            ...rollupImportMapPlugin(importmap),
+                            enforce: "pre",
+                            apply: "build",
+                        });
+                    }
+                },
+            },
+        },
+    ],
+    i18n: {
+        defaultLocale: "nb",
+        locales: ["nb", "nn", "en"],
+        routing: {
+            prefixDefaultLocale: true,
+        },
     },
-  },
-  output: "server",
-  adapter: node({
-    mode: "standalone",
-  }),
-  env: {
-    schema: {
-      MELDEKORT_API_URL: envField.string({
-        context: "server",
-        access: "secret",
-        default: "http://localhost:3000/api/tms-astro-template"
-      }),
-    }
-  }
+    output: "server",
+    adapter: node({
+        mode: "standalone",
+    }),
+    env: {
+        schema: {
+            MELDEKORT_API_URL: envField.string({
+                context: "server",
+                access: "secret",
+                default: "http://localhost:8083",
+            }),
+            MELDEKORT_URL: envField.string({
+                context: "client",
+                access: "public",
+                default: "http://localhost:3050/tiltakspenger/meldekort",
+            }),
+        },
+    },
 });

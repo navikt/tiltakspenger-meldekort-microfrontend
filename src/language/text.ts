@@ -2,7 +2,7 @@ export const text = {
     tittel: {
         nb: "Meldekort for tiltakspenger",
         nn: "Meldekort for tiltakspengar",
-        en: "Benefit activity report for participation allowance",
+        en: "Activity report for participation allowance",
     },
     ett: {
         nb: "Send inn meldekort",
@@ -17,6 +17,6 @@ export const text = {
     neste: {
         nb: "Neste meldekort kan sendes inn {dato}.",
         nn: "Neste meldekort kan sendast inn {dato}.",
-        en: "The next activity report can be submitted {dato}.",
+        en: "The next activity report can be submitted on {dato}.",
     },
 };
