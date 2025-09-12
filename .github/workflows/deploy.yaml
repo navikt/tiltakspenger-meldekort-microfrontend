@@ -54,7 +54,7 @@ jobs:
     needs: build
     with:
       id: "tiltakspenger-meldekort-microfrontend"
-      url: "http://tiltakspenger-meldekort-microfrontend"
+      url: "http://tiltakspenger-meldekort-microfrontend.tpts"
       appname: "tiltakspenger-meldekort-microfrontend"
       namespace: "tpts"
       cluster: dev-gcp
@@ -69,7 +69,7 @@ jobs:
   #   needs: build
   #   with:
   #     id: "tiltakspenger-meldekort-microfrontend-id"
-  #     url: "http://tiltakspenger-meldekort-microfrontend"
+  #     url: "http://tiltakspenger-meldekort-microfrontend.tpts"
   #     appname: "tiltakspenger-meldekort-microfrontend"
   #     namespace: "team-namespace"
   #     cluster: prod-gcp
