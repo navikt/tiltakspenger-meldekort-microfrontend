@@ -24,6 +24,14 @@ spec:
       rules:
         - application: tms-min-side
         - namespace: min-side
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
   resources:
     limits:
       memory: 768Mi
