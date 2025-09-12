@@ -24,6 +24,9 @@ spec:
       rules:
         - application: tms-min-side
           namespace: min-side
+    outbound:
+      rules:
+        - application: tiltakspenger-meldekort-api
   observability:
     autoInstrumentation:
       enabled: true
