@@ -1,19 +1,35 @@
 ---
 // If your microfrontend contains dynamic information that potentially could fails to load, you can create a static version of your microfrontend here that will be displayed to the user instead.
 
-import { Heading } from "@navikt/ds-react";
+import { BodyShort, Heading } from "@navikt/ds-react";
 import { text } from "@src/language/text";
 import type { Language } from "@src/language/types";
 import styles from "@src/styles/index.module.css";
 import "@src/styles/aksel.css";
+import { MELDEKORT_URL } from "astro:env/client";
+import { ChevronRightIcon } from "@navikt/aksel-icons";
 
 const language = Astro.currentLocale as Language;
 ---
 
 <section class="tiltakspenger-meldekort-microfrontend">
     <div class={styles.microfrontend}>
-        <Heading size="small" level="3">
-            {text.tittel[language]}
-        </Heading>
+        <a href={MELDEKORT_URL}>
+            <div class={styles.tittel}>
+                <Heading size="small" level="3">
+                    {text.tittel[language]}
+                </Heading>
+            </div>
+            <div class={styles.body}>
+                <BodyShort>
+                    <>
+                        {text.fallback[language]}
+                    </>
+                </BodyShort>
+                <div class={styles.chevron}>
+                    <ChevronRightIcon />
+                </div>
+            </div>
+        </a>
     </div>
 </section>

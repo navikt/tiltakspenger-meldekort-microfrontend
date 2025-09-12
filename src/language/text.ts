@@ -19,4 +19,9 @@ export const text = {
         nn: "Neste meldekort kan sendast inn {dato}.",
         en: "The next activity report can be submitted on {dato}.",
     },
+    fallback: {
+        nb: "Gå til dine meldekort",
+        nn: "Gå til dine meldekort",
+        en: "Go to your activity reports",
+    },
 };
