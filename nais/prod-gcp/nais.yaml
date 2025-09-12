@@ -46,3 +46,5 @@ spec:
       value: http://tiltakspenger-meldekort-api
     - name: MELDEKORT_API_SCOPE
       value: prod-gcp:tpts:tiltakspenger-meldekort-api
+    - name: MELDEKORT_URL
+      value: https://www.ansatt.dev.nav.no/tiltakspenger/meldekort
