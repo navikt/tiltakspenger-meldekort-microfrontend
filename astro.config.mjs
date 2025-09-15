@@ -59,8 +59,8 @@ export default defineConfig({
                 default: "http://localhost:8083",
             }),
             MELDEKORT_URL: envField.string({
-                context: "client",
-                access: "public",
+                context: "server",
+                access: "secret",
                 default: "http://localhost:3050/tiltakspenger/meldekort",
             }),
         },
