@@ -6,7 +6,7 @@ import { text } from "@src/language/text";
 import type { Language } from "@src/language/types";
 import styles from "@src/styles/index.module.css";
 import "@src/styles/aksel.css";
-import { MELDEKORT_URL } from "astro:env/client";
+import { MELDEKORT_URL } from "astro:env/server";
 import { ChevronRightIcon } from "@navikt/aksel-icons";
 
 const language = Astro.currentLocale as Language;
