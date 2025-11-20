@@ -26,7 +26,17 @@ try {
 const language = Astro.currentLocale as Language;
 
 function getMeldekortText(data: any, language: Language) {
-    if (data.antallMeldekortKlarTilInnsending == 0 && data.nesteMuligeInnsending) {
+    if (data.antallMeldekortKlarTilInnsending == 0 && data.nesteMuligeInnsendingstidspunkt) {
+        const dato = new Date(data.nesteMuligeInnsendingstidspunkt);
+        const formatertDato = new Intl.DateTimeFormat(language, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+        }).format(dato);
+        return text.neste[language].replace("{dato}", formatertDato);
+    } else if (data.antallMeldekortKlarTilInnsending == 0 && data.nesteMuligeInnsending) {
         const dato = new Date(data.nesteMuligeInnsending);
         const formatertDato = new Intl.DateTimeFormat(language, {
             day: "numeric",
