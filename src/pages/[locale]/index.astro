@@ -36,14 +36,6 @@ function getMeldekortText(data: any, language: Language) {
             minute: "numeric",
         }).format(dato);
         return text.neste[language].replace("{dato}", formatertDato);
-    } else if (data.antallMeldekortKlarTilInnsending == 0 && data.nesteMuligeInnsending) {
-        const dato = new Date(data.nesteMuligeInnsending);
-        const formatertDato = new Intl.DateTimeFormat(language, {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }).format(dato);
-        return text.neste[language].replace("{dato}", formatertDato);
     } else if (data.antallMeldekortKlarTilInnsending == 1) {
         return text.ett[language];
     } else if (data.antallMeldekortKlarTilInnsending > 1) {
