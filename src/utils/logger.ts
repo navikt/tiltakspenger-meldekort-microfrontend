@@ -1,23 +1,38 @@
-import { logs, NodeSDK, tracing } from "@opentelemetry/sdk-node";
 import pino from "pino";
 
-const sdk = new NodeSDK({
-    spanProcessor: new tracing.SimpleSpanProcessor(new tracing.ConsoleSpanExporter()),
-    logRecordProcessor: new logs.SimpleLogRecordProcessor(new logs.ConsoleLogRecordExporter()),
-});
+let logger: ReturnType<typeof pino>;
 
-sdk.start();
+/** Merk: Dette er kun server-side kode.
+ * @opentelemetry/sdk-node bruker Node-spesifikke moduler som 'zlib' og 'stream', som ikke finnes
+ * i nettleseren.
+ * Derfor må importen kun skje under SSR (import.meta.env.SSR) så Astro/Vite ynngår å pakke
+ * nodemodulene inn i klienten.
+ */
+if (import.meta.env.SSR) {
+    const { logs, NodeSDK, tracing } = await import("@opentelemetry/sdk-node");
 
-process.on("SIGTERM", () => {
-    sdk.shutdown()
-        .then(() => logger.info("Opentelemetry Tracing terminated"))
-        .catch((error) => logger.error("Error terminating Opentelemetry Tracing", error))
-        .finally(() => process.exit(0));
-});
+    const sdk = new NodeSDK({
+        spanProcessors: [new tracing.SimpleSpanProcessor(new tracing.ConsoleSpanExporter())],
+        logRecordProcessors: [
+            new logs.SimpleLogRecordProcessor(new logs.ConsoleLogRecordExporter()),
+        ],
+    });
 
-export const logger = pino({
-    timestamp: () => `,"@timestamp":"${new Date().toISOString()}"`,
-    formatters: {
-        level: (label) => ({ level: label.toUpperCase() }),
-    },
-});
+    sdk.start();
+
+    process.on("SIGTERM", () => {
+        sdk.shutdown()
+            .then(() => logger.info("Opentelemetry Tracing terminated"))
+            .catch((error) => logger.error("Error terminating Opentelemetry Tracing", error))
+            .finally(() => process.exit(0));
+    });
+
+    logger = pino({
+        timestamp: () => `,"@timestamp":"${new Date().toISOString()}"`,
+        formatters: {
+            level: (label) => ({ level: label.toUpperCase() }),
+        },
+    });
+}
+
+export { logger };
