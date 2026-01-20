@@ -24,7 +24,7 @@
     "@opentelemetry/sdk-node": "^0.208.0",
     "astro": "^5.16.4",
     "pino": "^10.1.0",
-    "react": "^19.2.1",
+    "react": "^19.2.3",
     "react-dom": "^19.2.1"
   },
   "devDependencies": {
