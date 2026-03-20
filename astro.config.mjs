@@ -1,6 +1,4 @@
 import { defineConfig, envField } from "astro/config";
-import { rollupImportMapPlugin } from "rollup-plugin-import-map";
-import importmap from "./importmap.json";
 import react from "@astrojs/react";
 import node from "@astrojs/node";
 import prefixer from "postcss-prefix-selector";
@@ -8,7 +6,7 @@ import prefixer from "postcss-prefix-selector";
 // https://astro.build/config
 export default defineConfig({
     build: {
-        assetsPrefix: "https://cdn.nav.no/min-side/tiltakspenger-meldekort-microfrontend",
+        assetsPrefix: "https://cdn.nav.no/tpts/tiltakspenger-meldekort-microfrontend",
         inlineStylesheets: "always",
     },
     vite: {
@@ -23,23 +21,7 @@ export default defineConfig({
             },
         },
     },
-    integrations: [
-        react(),
-        {
-            name: "importmap",
-            hooks: {
-                "astro:build:setup": ({ vite, target }) => {
-                    if (target === "client") {
-                        vite.plugins.push({
-                            ...rollupImportMapPlugin(importmap),
-                            enforce: "pre",
-                            apply: "build",
-                        });
-                    }
-                },
-            },
-        },
-    ],
+    integrations: [react()],
     i18n: {
         defaultLocale: "nb",
         locales: ["nb", "nn", "en"],
