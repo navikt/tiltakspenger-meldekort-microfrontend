@@ -50,7 +50,7 @@ function getMeldekortText(data: any, language: Language) {
 
 <>
     {isLocal && <meta charset="UTF-8" />}
-    <section class="tiltakspenger-meldekort-microfrontend">
+    <div class="tiltakspenger-meldekort-microfrontend">
         <div class={styles.microfrontend} }>
             <a href={MELDEKORT_URL}>
                 <div class={styles.tittel}>
@@ -64,13 +64,11 @@ function getMeldekortText(data: any, language: Language) {
                             {getMeldekortText(data, language)}
                         </>
                     </BodyShort>
-                    <div class={styles.chevron}>
-                        <ChevronRightIcon />
-                    </div>
+                    <ChevronRightIcon className={styles.chevron} fontSize="24px" />
                 </div>
             </a>
         </div>
-    </section>
+    </div>
     <script>
         import { getAnalyticsInstance } from "@navikt/nav-dekoratoren-moduler";
         import { logger } from "@src/utils/logger";
