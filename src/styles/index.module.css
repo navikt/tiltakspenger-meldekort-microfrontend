@@ -46,10 +46,11 @@
 .body {
     padding: 1.25rem;
     text-align: left;
+    display: flex;
+    justify-content: space-between;
 }
 
 .chevron {
-    position: absolute;
     right: 1rem;
     bottom: 0.5rem;
     flex-shrink: 0;
