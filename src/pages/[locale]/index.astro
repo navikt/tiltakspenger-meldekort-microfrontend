@@ -64,7 +64,11 @@ function getMeldekortText(data: any, language: Language) {
                             {getMeldekortText(data, language)}
                         </>
                     </BodyShort>
-                    <ChevronRightIcon className={styles.chevron} fontSize="24px" />
+                    <ChevronRightIcon
+                        className={styles.chevron}
+                        aria-hidden="true"
+                        fontSize="24px"
+                    />
                 </div>
             </a>
         </div>
