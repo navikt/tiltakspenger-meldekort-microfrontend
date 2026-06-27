@@ -1,4 +1,4 @@
-name: "Deploy dev&prod"
+name: Build and deploy
 on:
   push:
     branches:
