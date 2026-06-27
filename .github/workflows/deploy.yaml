@@ -4,6 +4,15 @@ on:
     branches:
       - "main"
       - "dev-*"
+    paths-ignore:
+      - '**.md'
+      - '.env-template'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.husky/**'
+      - 'CODEOWNERS'
+      - 'docker-compose/**'
+      - 'LICENSE'
 
 jobs:
   build:
