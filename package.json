@@ -41,7 +41,7 @@
     "hono": "^4.11.7",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.16",
     "postcss-prefix-selector": "^2.1.1",
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
