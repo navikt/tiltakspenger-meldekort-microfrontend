@@ -10,12 +10,23 @@ spec:
     enabled: true
   image: {{ image }}
   port: 3000
+  # Prober følger felles mal, se «Delte konvensjoner» i navikt/tiltakspenger AGENTS.md. Avvik skal begrunnes med kommentar her.
+  startup:
+    path: /api/internal/isAlive
+    initialDelay: 5
+    periodSeconds: 5
+    failureThreshold: 60
+    timeout: 3
   liveness:
     path: /api/internal/isAlive
-    initialDelay: 10
+    periodSeconds: 10
+    failureThreshold: 3
+    timeout: 3
   readiness:
     path: /api/internal/isReady
-    initialDelay: 10
+    periodSeconds: 5
+    failureThreshold: 1
+    timeout: 3
   replicas:
     min: 2
     max: 4
