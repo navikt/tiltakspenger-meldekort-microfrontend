@@ -1,4 +1,7 @@
 name: Build and deploy
+
+# Astro-microfrontend: bygg + CDN-opplasting + mikrofrontend-manifest (tms-deploy) + nais-deploy.
+# Bevisst ikke delt (jf. metarepoets workflows-README): Astro-bygg, CDN, tms-manifest-oppdatering og dev-*-deploy avviker for mye fra JVM-/standard-frontend-mønsteret.
 on:
   push:
     branches:
@@ -8,11 +11,21 @@ on:
       - '**.md'
       - '.env-template'
       - '.gitattributes'
+      # CI-endringer deployer ikke - de verifiseres av branch-gaten og metarepoets lint (beslutning i navikt/tiltakspenger#39).
+      - '.github/**'
       - '.gitignore'
       - '.husky/**'
       - 'CODEOWNERS'
       - 'docker-compose/**'
       - 'LICENSE'
+
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
+# Per ref: main->prod og dev-*->dev er ulike clustere, så en dev-deploy skal ikke blokkere en prod-deploy.
+concurrency:
+  group: build-and-deploy-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -25,8 +38,11 @@ jobs:
       packages: "write"
 
     steps:
-      - uses: "actions/checkout@v4"
-      - uses: "actions/setup-node@v4"
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          # Ikke la tokenet ligge igjen i .git/config - stegene kjører avhengigheters kode.
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
           registry-url: "https://npm.pkg.github.com"
@@ -42,8 +58,9 @@ jobs:
         env:
           ASTRO_KEY: ${{ secrets.ASTRO_KEY }}
 
+      # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); resten av Nav bruker @master, vi SHA-pinner (jf. metarepoets workflows-README).
       - name: "Upload to cdn"
-        uses: nais/deploy/actions/cdn-upload/v2@master
+        uses: nais/deploy/actions/cdn-upload/v2@2d18f050f07b6a007864c6a57070ed915d571beb # master 2026-07
         with:
           team: tpts
           source: ./dist/client/_astro
@@ -51,7 +68,6 @@ jobs:
 
       - name: "Build and push"
         # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
-        # Denne SHA-en: https://github.com/nais/docker-build-push/commit/31c3a7321909bcb20799fdf46153fec721fd9512
         uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
         id: docker-build-push
         with:
@@ -60,8 +76,9 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
 
+  # tms-deploy er Navs delte mikrofrontend-manifest-workflow; SHA-pinnes som all annen tredjeparts-action (Dependabot bumper den).
   update-manifest-dev:
-    uses: navikt/tms-deploy/.github/workflows/oppdater-mikrofrontend-manifest-v3.yaml@main
+    uses: navikt/tms-deploy/.github/workflows/oppdater-mikrofrontend-manifest-v3.yaml@67dc876fb9e1a0b115e47a36fd46a1c7b0064d4c # main 2026-07
     needs: build
     with:
       id: "tiltakspenger-meldekort-microfrontend"
@@ -72,11 +89,14 @@ jobs:
       commitmsg: ${{ github.event.head_commit.message}}
       fallback: "fallback" # Should containt the path to the fallback page after src/pages/[locale]/...
       ssr: true
-    secrets: inherit
+    # tms-workflowen leser kun disse to (github-app-token-generator); eksplisitt fremfor `inherit` = minste-privilegium og tilfredsstiller zizmor.
+    secrets:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      APP_ID: ${{ secrets.APP_ID }}
 
   update-manifest-prod:
     if: github.ref == 'refs/heads/main'
-    uses: navikt/tms-deploy/.github/workflows/oppdater-mikrofrontend-manifest-v3.yaml@main
+    uses: navikt/tms-deploy/.github/workflows/oppdater-mikrofrontend-manifest-v3.yaml@67dc876fb9e1a0b115e47a36fd46a1c7b0064d4c # main 2026-07
     needs: build
     with:
       id: "tiltakspenger-meldekort-microfrontend"
@@ -87,7 +107,10 @@ jobs:
       commitmsg: ${{ github.event.head_commit.message}}
       fallback: "fallback" # Should containt the path to the fallback page after src/pages/[locale]/...
       ssr: true
-    secrets: inherit
+    # tms-workflowen leser kun disse to (github-app-token-generator); eksplisitt fremfor `inherit` = minste-privilegium og tilfredsstiller zizmor.
+    secrets:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      APP_ID: ${{ secrets.APP_ID }}
 
   deploy-dev:
     runs-on: "ubuntu-latest"
@@ -96,9 +119,11 @@ jobs:
       id-token: "write"
     needs: [build, update-manifest-dev]
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: "Deploy to dev"
-        uses: "nais/deploy/actions/deploy@v2"
+        uses: nais/deploy/actions/deploy@2d18f050f07b6a007864c6a57070ed915d571beb # v2
         env:
           CLUSTER: dev-gcp
           RESOURCE: nais/dev-gcp/nais.yaml
@@ -112,9 +137,11 @@ jobs:
       id-token: "write"
     needs: [build, update-manifest-prod]
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: "Deploy to prod"
-        uses: "nais/deploy/actions/deploy@v2"
+        uses: nais/deploy/actions/deploy@2d18f050f07b6a007864c6a57070ed915d571beb # v2
         env:
           CLUSTER: prod-gcp
           RESOURCE: nais/prod-gcp/nais.yaml
