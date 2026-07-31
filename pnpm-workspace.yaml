@@ -1,0 +1,9 @@
+# Tillat byggescript for spesifikke pakker selv om .npmrc har ignore-scripts=true.
+# esbuild:    bundleren Astro/Vite bruker, henter/verifiserer den plattformspesifikke binæren
+# sharp:      native bildebehandling brukt av Astros bildeoptimalisering
+# protobufjs: postinstall genererer kun ekstra CLI-filer vi ikke bruker - eksplisitt av,
+#             slik at pnpm ikke feiler installasjonen med ERR_PNPM_IGNORED_BUILDS
+allowBuilds:
+  esbuild: true
+  protobufjs: false
+  sharp: true
