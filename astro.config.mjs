@@ -27,6 +27,9 @@ export default defineConfig({
         locales: ["nb", "nn", "en"],
         routing: {
             prefixDefaultLocale: true,
+            // Astro 6 snudde defaulten fra true til false. Settes eksplisitt for å beholde
+            // oppførselen fra Astro 5: / omdirigeres til /nb/.
+            redirectToDefaultLocale: true,
         },
     },
     output: "server",

@@ -7,3 +7,11 @@ allowBuilds:
   esbuild: true
   protobufjs: false
   sharp: true
+
+# Unntak fra 7-dagers cooldown (minimumReleaseAge). Cooldown er et bevisst supply-chain-mottiltak,
+# men den holder også igjen ferske sikkerhetsfikser. Her veier fiksen tyngre enn ventetiden.
+# brace-expansion: GHSA-mh99-v99m-4gvg (HIGH, DoS via ubegrenset ekspansjon). Fiksen kom i 1.1.17
+#                  2026-07-29; uten unntaket faller resolvingen tilbake til sårbare 1.1.16.
+# Fjern oppføringen når 1.1.17 har passert cooldown av seg selv.
+minimumReleaseAgeExclude:
+  - brace-expansion

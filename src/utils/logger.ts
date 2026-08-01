@@ -14,7 +14,8 @@ if (import.meta.env.SSR) {
     const sdk = new NodeSDK({
         spanProcessors: [new tracing.SimpleSpanProcessor(new tracing.ConsoleSpanExporter())],
         logRecordProcessors: [
-            new logs.SimpleLogRecordProcessor(new logs.ConsoleLogRecordExporter()),
+            // Fra @opentelemetry/sdk-node 0.221 tar SimpleLogRecordProcessor et options-objekt.
+            new logs.SimpleLogRecordProcessor({ exporter: new logs.ConsoleLogRecordExporter() }),
         ],
     });
 
