@@ -39,8 +39,9 @@ jobs:
     permissions:
       contents: read
     with:
-      # Repoet har verken lint- eller test-script; `build` = `astro check && astro build` er den eneste kvalitetsgaten.
-      kommando: '"$PAKKEHANDTERER" run build'
+      # Tre gater, billigst først: lint fanger malfeil i .astro (typen «forvillet }» som astro check slipper gjennom),
+      # test dekker tekstlogikken og stilreglene, build kjører `astro check && astro build`.
+      kommando: '"$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run test && "$PAKKEHANDTERER" run build'
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
