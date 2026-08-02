@@ -1,1 +1,12 @@
-@import "@navikt/ds-css";
+/* Kun delene av designsystemet vi faktisk bruker — kortet er en Heading, en BodyShort
+   og et inline SVG-ikon. Å importere hele @navikt/ds-css la 280 kB inline CSS i hvert
+   SSR-svar (99,7 % av responsen), og inline CSS caches aldri.
+   @font-face og @keyframes prefikses aldri av postcss-prefix-selector, så hele Aksels
+   sett med animasjonsnavn lekket globalt inn i Min side og overstyrte vertens egne.
+   Samme utvalg som tms-microfrontend-template-ssr, minus button/link/loader vi ikke bruker. */
+@import "@navikt/ds-css/dist/global/fonts.css";
+@import "@navikt/ds-css/dist/global/tokens.css";
+@import "@navikt/ds-css/dist/global/reset.css";
+@import "@navikt/ds-css/dist/global/baseline.css";
+@import "@navikt/ds-css/dist/global/print.css";
+@import "@navikt/ds-css/dist/component/typography.css";
