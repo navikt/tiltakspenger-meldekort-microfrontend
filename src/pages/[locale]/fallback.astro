@@ -8,10 +8,12 @@ import styles from "@src/styles/index.module.css";
 import "@src/styles/aksel.css";
 import { MELDEKORT_URL } from "astro:env/server";
 import { ChevronRightIcon } from "@navikt/aksel-icons";
+import { isLocal } from "../../utils/environment";
 
 const language = Astro.currentLocale as Language;
 ---
 
+{isLocal && <meta charset="UTF-8" />}
 <div class="tiltakspenger-meldekort-microfrontend">
     <div class={styles.microfrontend}>
         <a href={MELDEKORT_URL}>
@@ -26,9 +28,7 @@ const language = Astro.currentLocale as Language;
                         {text.fallback[language]}
                     </>
                 </BodyShort>
-                <div class={styles.chevron}>
-                    <ChevronRightIcon />
-                </div>
+                <ChevronRightIcon className={styles.chevron} aria-hidden="true" fontSize="24px" />
             </div>
         </a>
     </div>
