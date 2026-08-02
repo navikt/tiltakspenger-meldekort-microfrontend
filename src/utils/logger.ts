@@ -1,32 +1,17 @@
-import pino from "pino";
+import type { Logger } from "pino";
 
-let logger: ReturnType<typeof pino>;
+let logger: Logger;
 
-/** Merk: Dette er kun server-side kode.
- * @opentelemetry/sdk-node bruker Node-spesifikke moduler som 'zlib' og 'stream', som ikke finnes
- * i nettleseren.
- * Derfor må importen kun skje under SSR (import.meta.env.SSR) så Astro/Vite ynngår å pakke
- * nodemodulene inn i klienten.
+/**
+ * pino lastes bak SSR-gaten, så klientbundelen slipper pinos browser-build; i nettleseren
+ * er konsollen sluket, slik at en klientimport aldri møter en undefined logger.
+ * All OTel-instrumentering (traces, logger, pino-korrelasjon) eies av nais-operatøren, som
+ * injiserer sin SDK via NODE_OPTIONS før appkoden kjører. En egen NodeSDK her avvises som
+ * duplikat av @opentelemetry/api, og en egen SIGTERM-handler ville revet prosessen mens
+ * operatørens SDK flusher siste batch spans og logger. Derfor settes kun pino opp her.
  */
 if (import.meta.env.SSR) {
-    const { logs, NodeSDK, tracing } = await import("@opentelemetry/sdk-node");
-
-    const sdk = new NodeSDK({
-        spanProcessors: [new tracing.SimpleSpanProcessor(new tracing.ConsoleSpanExporter())],
-        logRecordProcessors: [
-            // Fra @opentelemetry/sdk-node 0.221 tar SimpleLogRecordProcessor et options-objekt.
-            new logs.SimpleLogRecordProcessor({ exporter: new logs.ConsoleLogRecordExporter() }),
-        ],
-    });
-
-    sdk.start();
-
-    process.on("SIGTERM", () => {
-        sdk.shutdown()
-            .then(() => logger.info("Opentelemetry Tracing terminated"))
-            .catch((error) => logger.error("Error terminating Opentelemetry Tracing", error))
-            .finally(() => process.exit(0));
-    });
+    const { default: pino } = await import("pino");
 
     logger = pino({
         timestamp: () => `,"@timestamp":"${new Date().toISOString()}"`,
@@ -34,6 +19,9 @@ if (import.meta.env.SSR) {
             level: (label) => ({ level: label.toUpperCase() }),
         },
     });
+} else {
+    // Konsollens error/warn/info/debug dekker måtene logger faktisk brukes på.
+    logger = console as unknown as Logger;
 }
 
 export { logger };
