@@ -4,18 +4,23 @@ import { text } from "@src/language/text";
 import { logger } from "@src/utils/logger";
 import { getOboToken } from "@src/utils/token";
 import { getDataFromAPI } from "@src/utils/fetch";
+import { getMeldekortText } from "@src/utils/meldekortTekst";
 import { MELDEKORT_API_URL } from "astro:env/server";
 import { MELDEKORT_URL } from "astro:env/server";
 import type { Language } from "@src/language/types";
+import type { MeldekortKortInfo } from "@src/types/MeldekortType";
 import styles from "@src/styles/index.module.css";
 import "@src/styles/aksel.css";
 import { isLocal } from "../../utils/environment";
 import { ChevronRightIcon } from "@navikt/aksel-icons";
 
-const oboToken = await getOboToken(Astro.locals.token);
-let data;
+let data: MeldekortKortInfo;
 
+// Tokenvekslingen må ligge inne i try-blokka: feiler TokenX utenfor, kaster den ubehandlet
+// og Astro svarer 500 uten at vi får logget noe. Min side bytter inn fallback-siden ved
+// begge statusene, men 503 er signalet vi faktisk mener, og logglinja er den som forklarer hvorfor.
 try {
+    const oboToken = await getOboToken(Astro.locals.token);
     const url = `${MELDEKORT_API_URL}/din-side/microfrontend/meldekort-kort-info`;
     data = await getDataFromAPI(oboToken, url);
 } catch (error) {
@@ -24,28 +29,6 @@ try {
 }
 
 const language = Astro.currentLocale as Language;
-
-function getMeldekortText(data: any, language: Language) {
-    if (data.antallMeldekortKlarTilInnsending == 0 && data.nesteMuligeInnsendingstidspunkt) {
-        const dato = new Date(data.nesteMuligeInnsendingstidspunkt);
-        const formatertDato = new Intl.DateTimeFormat(language, {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-        }).format(dato);
-        return text.neste[language].replace("{dato}", formatertDato);
-    } else if (data.antallMeldekortKlarTilInnsending == 1) {
-        return text.ett[language];
-    } else if (data.antallMeldekortKlarTilInnsending > 1) {
-        return text.flere[language].replace(
-            "{count}",
-            data.antallMeldekortKlarTilInnsending.toString(),
-        );
-    }
-    return text.ett[language];
-}
 ---
 
 <>

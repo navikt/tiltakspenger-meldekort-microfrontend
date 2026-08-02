@@ -1,5 +1,7 @@
+import { logger } from "./logger";
+
 export const getDataFromAPI = async (oboToken: string, url: string) => {
-    console.debug(`Attempting to reach: ${url}`);
+    logger.debug(`Attempting to reach: ${url}`);
 
     const response = await fetch(url, {
         method: "GET",
