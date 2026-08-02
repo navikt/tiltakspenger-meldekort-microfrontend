@@ -1,19 +1,32 @@
-import type { Logger } from "pino";
+import pino from "pino";
 
-let logger: Logger;
+let logger: ReturnType<typeof pino>;
 
-/**
- * Kun server-side; pino lastes bak SSR-gaten, så klientbundelen slipper pinos browser-build.
- * I klientbundelen er `logger` dermed undefined. Klientscriptet i index.astro importerer den,
- * men har i dag ingen nåbar bruk (klikklytteren festes aldri) - hele det scriptet ryddes
- * sammen med analytics-oppsettet.
- * All OTel-instrumentering (traces, logger, pino-korrelasjon) eies av nais-operatøren, som
- * injiserer sin SDK via NODE_OPTIONS før appkoden kjører. En egen NodeSDK her avvises som
- * duplikat av @opentelemetry/api, og en egen SIGTERM-handler ville revet prosessen mens
- * operatørens SDK flusher siste batch spans og logger. Derfor settes kun pino opp her.
+/** Merk: Dette er kun server-side kode.
+ * @opentelemetry/sdk-node bruker Node-spesifikke moduler som 'zlib' og 'stream', som ikke finnes
+ * i nettleseren.
+ * Derfor må importen kun skje under SSR (import.meta.env.SSR) så Astro/Vite ynngår å pakke
+ * nodemodulene inn i klienten.
  */
 if (import.meta.env.SSR) {
-    const { default: pino } = await import("pino");
+    const { logs, NodeSDK, tracing } = await import("@opentelemetry/sdk-node");
+
+    const sdk = new NodeSDK({
+        spanProcessors: [new tracing.SimpleSpanProcessor(new tracing.ConsoleSpanExporter())],
+        logRecordProcessors: [
+            // Fra @opentelemetry/sdk-node 0.221 tar SimpleLogRecordProcessor et options-objekt.
+            new logs.SimpleLogRecordProcessor({ exporter: new logs.ConsoleLogRecordExporter() }),
+        ],
+    });
+
+    sdk.start();
+
+    process.on("SIGTERM", () => {
+        sdk.shutdown()
+            .then(() => logger.info("Opentelemetry Tracing terminated"))
+            .catch((error) => logger.error("Error terminating Opentelemetry Tracing", error))
+            .finally(() => process.exit(0));
+    });
 
     logger = pino({
         timestamp: () => `,"@timestamp":"${new Date().toISOString()}"`,
