@@ -65,7 +65,7 @@ jobs:
 
       # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); resten av Nav bruker @master, vi SHA-pinner (jf. metarepoets workflows-README).
       - name: "Upload to cdn"
-        uses: nais/deploy/actions/cdn-upload/v2@2d18f050f07b6a007864c6a57070ed915d571beb # master 2026-07
+        uses: nais/deploy/actions/cdn-upload/v2@fc3eae3edebabdf67f7592102ae16176d5ba3b5f # master 2026-07
         with:
           team: tpts
           source: ./dist/client/_astro
