@@ -21,8 +21,8 @@ importers:
         specifier: 8.2.0
         version: 8.2.0
       '@navikt/ds-css':
-        specifier: 8.2.0
-        version: 8.2.0
+        specifier: 8.16.1
+        version: 8.16.1
       '@navikt/ds-react':
         specifier: 8.2.0
         version: 8.2.0(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -900,11 +900,18 @@ packages:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
 
+  '@napi-rs/wasm-runtime@1.2.0':
+    resolution: {integrity: sha512-kDoONqMa+VnZ4vvvu/ZUurpJ4gkZU57e7g69qpNgWhYcZFPUHZM2CEMKm+cG6ufDVALbjMvfmMjFVqaK7uEMnA==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
+    peerDependencies:
+      '@emnapi/core': ^2.0.0-alpha.3
+      '@emnapi/runtime': ^2.0.0-alpha.3
+
   '@navikt/aksel-icons@8.2.0':
     resolution: {integrity: sha512-oDNNNyafke41foUxHC7cDODXz3Lrx9GberqCU0ia5MdZsMWPnHwGd+jIyP7DT9UNTAxMUMpZ/kqq173g8ECyEw==, tarball: https://npm.pkg.github.com/download/@navikt/aksel-icons/8.2.0/815b0ce71ba251f4443c3677106887ea2a70ad3d}
 
-  '@navikt/ds-css@8.2.0':
-    resolution: {integrity: sha512-cPlUu16bCNgfRTyQUeBBJr7DSwz2546j9KpHoMfZeDC8e4utLSzzs6vqOPBjuOOXwlhM79zFI+NyccaxtO50Qw==, tarball: https://npm.pkg.github.com/download/@navikt/ds-css/8.2.0/b8e8326ecf70d2dd9fcaeddaabaf8c37a906c6ef}
+  '@navikt/ds-css@8.16.1':
+    resolution: {integrity: sha512-UV0Qu0ynV3orcFjwhD17taKll/ZwAcySXLR4unrBzFkaOdvJ78i8L81CVn7YkdpIcyaA68fz2K7QKQZNO/QteA==, tarball: https://npm.pkg.github.com/download/@navikt/ds-css/8.16.1/dd3196185f7119601a19b0910a5da1beb5e47c4f}
 
   '@navikt/ds-react@8.2.0':
     resolution: {integrity: sha512-3UzZ7B2OBEWXQvrPaqiTSkFB1amduonwVm5hEgLN4HcHDLsoM2zqy8sewC2iFDXJDKUI0M27NoK41qlQ+H5rTQ==, tarball: https://npm.pkg.github.com/download/@navikt/ds-react/8.2.0/3796f65287a19791d516cac0d6df69e0ce1118a4}
@@ -3942,9 +3949,16 @@ snapshots:
       '@tybys/wasm-util': 0.10.3
     optional: true
 
+  '@napi-rs/wasm-runtime@1.2.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
+    dependencies:
+      '@emnapi/core': 1.11.1
+      '@emnapi/runtime': 1.11.1
+      '@tybys/wasm-util': 0.10.3
+    optional: true
+
   '@navikt/aksel-icons@8.2.0': {}
 
-  '@navikt/ds-css@8.2.0': {}
+  '@navikt/ds-css@8.16.1': {}
 
   '@navikt/ds-react@8.2.0(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
@@ -4039,7 +4053,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.2.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.1.5':
