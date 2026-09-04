@@ -41,7 +41,7 @@ jobs:
           # Ikke la tokenet ligge igjen i .git/config - stegene kjører avhengigheters kode.
           persist-credentials: false
       # pnpm-versjonen leses fra packageManager-feltet i package.json.
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
@@ -65,7 +65,7 @@ jobs:
 
       # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); resten av Nav bruker @master, vi SHA-pinner (jf. metarepoets workflows-README).
       - name: "Upload to cdn"
-        uses: nais/deploy/actions/cdn-upload/v2@2d18f050f07b6a007864c6a57070ed915d571beb # master 2026-07
+        uses: nais/deploy/actions/cdn-upload/v2@027a91857992525139798892f2804b0ca21f4af6 # master 2026-08
         with:
           team: tpts
           source: ./dist/client/_astro
@@ -80,7 +80,7 @@ jobs:
 
       - name: "Build and push"
         # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
-        uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
+        uses: nais/docker-build-push@8e41f1f58749b9248e376c25d33bfbdd2b1163c0 # v0
         id: docker-build-push
         with:
           team: tpts
@@ -151,7 +151,7 @@ jobs:
         with:
           persist-credentials: false
       - name: "Deploy to dev"
-        uses: nais/deploy/actions/deploy@2d18f050f07b6a007864c6a57070ed915d571beb # v2
+        uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
         env:
           CLUSTER: dev-gcp
           RESOURCE: nais/dev-gcp/nais.yaml
@@ -169,7 +169,7 @@ jobs:
         with:
           persist-credentials: false
       - name: "Deploy to prod"
-        uses: nais/deploy/actions/deploy@2d18f050f07b6a007864c6a57070ed915d571beb # v2
+        uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
         env:
           CLUSTER: prod-gcp
           RESOURCE: nais/prod-gcp/nais.yaml

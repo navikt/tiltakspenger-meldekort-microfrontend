@@ -13,11 +13,3 @@ allowBuilds:
 # Ligger i repoet slik at regelen gjelder alle som regenererer lockfila, ikke bare lokale maskiner.
 # Trengs et unntak for en fersk sikkerhetsfiks, bruk minimumReleaseAgeExclude med begrunnelse.
 minimumReleaseAge: 10080
-
-# Unntak fra cooldown - sikkerhetsfiksen veier tyngre enn ventetiden:
-# brace-expansion: GHSA-mh99-v99m-4gvg (HIGH, DoS via ubegrenset ekspansjon). Lockfila står på
-#                  1.1.18 og 5.0.9, begge publisert 2026-07-30 og forbi fiksen; eldre versjoner
-#                  er sårbare, så uten unntaket avviser policyen lockfila fram til 2026-08-06.
-# Fjern unntaket etter 2026-08-06.
-minimumReleaseAgeExclude:
-  - brace-expansion

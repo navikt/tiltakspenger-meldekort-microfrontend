@@ -62,17 +62,27 @@ const language = Astro.currentLocale as Language;
 
         const analyticsLogger = getAnalyticsInstance("dekoratoren");
 
-        export const logEvent = (data: string, kategori: string, lenketekst: string) => {
+        // Dekoratoren-moduler 4 typer navigere-hendelsen mot @navikt/analytics-types.
+        // komponent heter nå komponentId, kategori dekkes av lenkegruppe, og destinasjon er påkrevd.
+        // Destinasjonen leses fra lenken som ble klikket, slik at feltet ikke blir en oppdiktet verdi.
+        export const logEvent = (
+            data: string,
+            kategori: string,
+            lenketekst: string,
+            destinasjon: string,
+        ) => {
             analyticsLogger("navigere", {
-                komponent: data,
-                kategori: kategori,
+                komponentId: data,
+                lenkegruppe: kategori,
                 lenketekst: lenketekst,
+                destinasjon: destinasjon,
             }).catch(() => logger.warn("Uninitialized amplitude"));
         };
         const microfrontend = document.querySelector("#microfrontend");
 
         microfrontend?.addEventListener("click", () => {
-            logEvent("komponent", "kategori", "lenketekst");
+            const lenke = microfrontend.querySelector<HTMLAnchorElement>("a");
+            logEvent("komponent", "kategori", "lenketekst", lenke?.href ?? "");
         });
     </script>
 </>
