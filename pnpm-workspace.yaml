@@ -13,3 +13,7 @@ allowBuilds:
 # Ligger i repoet slik at regelen gjelder alle som regenererer lockfila, ikke bare lokale maskiner.
 # Trengs et unntak for en fersk sikkerhetsfiks, bruk minimumReleaseAgeExclude med begrunnelse.
 minimumReleaseAge: 10080
+# Navs egne pakker tas med én gang; cooldownen gjelder tredjepart.
+minimumReleaseAgeExclude:
+  - "@navikt/*"
+  - "@nais/*"

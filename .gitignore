@@ -33,3 +33,8 @@ jspm_packages/
 todos.txt
 
 .gradle
+
+# Arbeidstrær (git worktree add) uansett navn og nivå
+.worktrees/
+.worktree/
+worktrees/
