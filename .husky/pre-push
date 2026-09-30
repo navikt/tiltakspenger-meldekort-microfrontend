@@ -2,4 +2,5 @@
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-pnpm exec eslint
+# eslint-cachen gjør at bare endrede filer lintes på nytt.
+pnpm exec eslint --cache --cache-location node_modules/.cache/eslint/
