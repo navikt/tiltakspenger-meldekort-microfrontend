@@ -43,9 +43,7 @@ const language = Astro.currentLocale as Language;
                 </div>
                 <div class={styles.body}>
                     <BodyShort>
-                        <>
-                            {getMeldekortText(data, language)}
-                        </>
+                        <>{getMeldekortText(data, language)}</>
                     </BodyShort>
                     <ChevronRightIcon
                         className={styles.chevron}

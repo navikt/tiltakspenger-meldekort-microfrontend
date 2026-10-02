@@ -24,9 +24,7 @@ const language = Astro.currentLocale as Language;
             </div>
             <div class={styles.body}>
                 <BodyShort>
-                    <>
-                        {text.fallback[language]}
-                    </>
+                    <>{text.fallback[language]}</>
                 </BodyShort>
                 <ChevronRightIcon className={styles.chevron} aria-hidden="true" fontSize="24px" />
             </div>
