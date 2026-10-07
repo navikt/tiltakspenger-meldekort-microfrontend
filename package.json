@@ -44,7 +44,7 @@
     "eslint-plugin-astro": "3.2.1",
     "eslint-plugin-css-modules": "2.12.0",
     "globals": "17.12.0",
-    "hono": "4.13.9",
+    "hono": "4.13.12",
     "husky": "9.1.7",
     "lint-staged": "17.5.1",
     "postcss": "8.5.28",
