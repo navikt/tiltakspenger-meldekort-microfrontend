@@ -36,13 +36,13 @@ jobs:
       packages: "write"
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           # Ikke la tokenet ligge igjen i .git/config - stegene kjører avhengigheters kode.
           persist-credentials: false
       # pnpm-versjonen leses fra packageManager-feltet i package.json.
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: pnpm/action-setup@v6.0.10
+      - uses: actions/setup-node@v7.0.0
         with:
           node-version: 24
           registry-url: "https://npm.pkg.github.com"
@@ -63,9 +63,9 @@ jobs:
         env:
           ASTRO_KEY: ${{ secrets.ASTRO_KEY }}
 
-      # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); resten av Nav bruker @master, vi SHA-pinner (jf. metarepoets workflows-README).
+      # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); som resten av Nav bruker vi @master, låst til commit i actions.lock.
       - name: "Upload to cdn"
-        uses: nais/deploy/actions/cdn-upload/v2@027a91857992525139798892f2804b0ca21f4af6 # master 2026-08
+        uses: nais/deploy/actions/cdn-upload/v2@master
         with:
           team: tpts
           source: ./dist/client/_astro
@@ -79,8 +79,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: "Build and push"
-        # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
-        uses: nais/docker-build-push@8e41f1f58749b9248e376c25d33bfbdd2b1163c0 # v0
+        # Versjonsoversikt: https://github.com/nais/docker-build-push/tags
+        uses: nais/docker-build-push@main
         id: docker-build-push
         with:
           team: tpts
@@ -88,7 +88,7 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
 
-  # tms-deploy er Navs delte mikrofrontend-manifest-workflow; SHA-pinnes som all annen tredjeparts-action (Dependabot bumper den).
+  # tms-deploy er Navs delte mikrofrontend-manifest-workflow. Den SHA-pinnes her i fila fordi actions.lock ikke låser reusable workflows fra andre repoer (Dependabot bumper den).
   # SHA-en er nyeste commit på selve fila ("Legg til fallback", 2025-06-06) - den er identisk med tms-deploy sin main, fila har bare ikke endret seg siden.
   #
   # `secrets: inherit` under er et bevisst unntak fra flåtekonvensjonen "send secrets eksplisitt, aldri inherit"
@@ -147,11 +147,11 @@ jobs:
       id-token: "write"
     needs: [build, update-manifest-dev]
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: "Deploy to dev"
-        uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
+        uses: nais/deploy/actions/deploy@master
         env:
           CLUSTER: dev-gcp
           RESOURCE: nais/dev-gcp/nais.yaml
@@ -165,11 +165,11 @@ jobs:
       id-token: "write"
     needs: [build, update-manifest-prod]
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: "Deploy to prod"
-        uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
+        uses: nais/deploy/actions/deploy@master
         env:
           CLUSTER: prod-gcp
           RESOURCE: nais/prod-gcp/nais.yaml
