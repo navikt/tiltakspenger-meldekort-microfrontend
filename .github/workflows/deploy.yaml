@@ -16,6 +16,12 @@ on:
       - 'CODEOWNERS'
       - 'docker-compose/**'
       - 'LICENSE'
+  # Planlagt bygg og deploy hverdager kl. 06 norsk tid, også uten kodeendringer: henter nyeste bygg av
+  # Chainguard-baseimaget (flytende tagg, se Dockerfile) og tar med Dependabot-merger som ikke trigget workflowen selv.
+  # Går gjennom samme test-gate og concurrency-gruppe som en vanlig push.
+  schedule:
+    - cron: '0 6 * * 1-5'
+      timezone: 'Europe/Oslo'
 
 # Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
 permissions: {}
@@ -114,7 +120,7 @@ jobs:
       appname: "tiltakspenger-meldekort-microfrontend"
       namespace: "tpts"
       cluster: dev-gcp
-      commitmsg: ${{ github.event.head_commit.message}}
+      commitmsg: ${{ github.event.head_commit.message || 'Planlagt nybygg' }}
       fallback: "fallback" # Should containt the path to the fallback page after src/pages/[locale]/...
       ssr: true
     # Se begrunnelsen for unntaket over jobben: tms-workflowen deklarerer ingen secrets, så `inherit` er eneste form som starter.
@@ -134,7 +140,7 @@ jobs:
       appname: "tiltakspenger-meldekort-microfrontend"
       namespace: "tpts"
       cluster: prod-gcp
-      commitmsg: ${{ github.event.head_commit.message}}
+      commitmsg: ${{ github.event.head_commit.message || 'Planlagt nybygg' }}
       fallback: "fallback" # Should containt the path to the fallback page after src/pages/[locale]/...
       ssr: true
     # Se begrunnelsen for unntaket over dev-jobben - `inherit` er eneste form som starter mot dagens tms-deploy.
@@ -192,5 +198,5 @@ jobs:
           WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
           REPO: ${{ github.repository }}
           REPO_NAME: ${{ github.event.repository.name }}
-          AUTHOR: ${{ github.event.pusher.name }}
+          AUTHOR: ${{ github.event.pusher.name || github.event_name }}
           COMMIT_SHA: ${{ github.sha }}
