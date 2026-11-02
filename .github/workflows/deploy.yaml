@@ -48,7 +48,7 @@ jobs:
           persist-credentials: false
       # pnpm-versjonen leses fra packageManager-feltet i package.json.
       - uses: pnpm/action-setup@v6.0.10
-      - uses: actions/setup-node@v7.0.0
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: 24
           registry-url: "https://npm.pkg.github.com"
