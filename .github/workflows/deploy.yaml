@@ -47,7 +47,7 @@ jobs:
           # Ikke la tokenet ligge igjen i .git/config - stegene kjører avhengigheters kode.
           persist-credentials: false
       # pnpm-versjonen leses fra packageManager-feltet i package.json.
-      - uses: pnpm/action-setup@v6.0.10
+      - uses: pnpm/action-setup@v6.1.1
       - uses: actions/setup-node@v7.0.0
         with:
           node-version: 24
